@@ -6,9 +6,9 @@ graph TD
         Test_Lab_Engineer["시험 랩 엔지니어/현장 작업자"]
     end
 
-    subgraph "B. 우리의 솔루션 (EnvSync)"
-        EnvSync_Service("EnvSync Service: 골든 이미지 빌드 플랫폼")
-        EnvSync_Dongle["EnvSync Dongle: 물리적 동글 하드웨어"]
+    subgraph "B. 우리의 솔루션 (AuraLink)"
+        AuraLink_Service("AuraLink Service: 골든 이미지 빌드 플랫폼")
+        AuraLink_Dongle["AuraLink Dongle: 물리적 동글 하드웨어"]
         PCAgent["PC Agent Software: 동글 제어 및 배포 엔진"]
     end
 
@@ -26,8 +26,8 @@ graph TD
     end
 
     subgraph "E. 사업 모델"
-        S1("EnvSync Service 구독/라이선스")
-        S2("EnvSync Dongle 판매/번들")
+        S1("AuraLink Service 구독/라이선스")
+        S2("AuraLink Dongle 판매/번들")
         S3("컨설팅/맞춤형 개발 (옵션)")
     end
 
@@ -35,31 +35,31 @@ graph TD
     %% Define Connections & Value Flow
     %% Customer Needs/Input
     HW_Dev_Company -- "소프트웨어/펌웨어 개발" --> Client_Dev_Env
-    Client_Dev_Env -- "골든 이미지 빌드 요청" --> EnvSync_Service
+    Client_Dev_Env -- "골든 이미지 빌드 요청" --> AuraLink_Service
 
-    %% EnvSync Core Process
-    EnvSync_Service -- "디지털 서명된 골든 이미지 생성" --> EnvSync_Dongle
-    EnvSync_Dongle -- "물리적 배포" --> Test_PC
+    %% AuraLink Core Process
+    AuraLink_Service -- "디지털 서명된 골든 이미지 생성" --> AuraLink_Dongle
+    AuraLink_Dongle -- "물리적 배포" --> Test_PC
     Test_PC -- "PC Agent 자동 실행" --> PCAgent
     PCAgent -- "골든 이미지 검증 & 배포/업데이트" --> Test_PC
     PCAgent -- "펌웨어 업데이트 명령" --> Target_HW
-    PCAgent -- "업데이트 상태/결과 보고" --> EnvSync_Dongle
+    PCAgent -- "업데이트 상태/결과 보고" --> AuraLink_Dongle
 
     %% End User Interaction
     Test_Lab_Engineer -- "동글 연결 & 시험 수행" --> Test_PC
 
     %% Value Proposition
-    EnvSync_Dongle -- "가치 제공" --> V1
+    AuraLink_Dongle -- "가치 제공" --> V1
     PCAgent -- "가치 제공" --> V1
-    EnvSync_Service -- "가치 제공" --> V2
-    EnvSync_Service -- "가치 제공" --> V3
-    EnvSync_Dongle -- "가치 제공" --> V4
+    AuraLink_Service -- "가치 제공" --> V2
+    AuraLink_Service -- "가치 제공" --> V3
+    AuraLink_Dongle -- "가치 제공" --> V4
     PCAgent -- "가치 제공" --> V4
 
     %% Business Model
-    EnvSync_Service -- "수익 모델" --> S1
-    EnvSync_Dongle -- "수익 모델" --> S2
-    EnvSync_Service -- "추가 수익" --> S3
+    AuraLink_Service -- "수익 모델" --> S1
+    AuraLink_Dongle -- "수익 모델" --> S2
+    AuraLink_Service -- "추가 수익" --> S3
 
     %% Benefits to Customer
     V1 --> HW_Dev_Company
