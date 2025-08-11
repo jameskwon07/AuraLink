@@ -16,7 +16,7 @@ namespace ImageDownloader
 {
     public interface IArtifactDownloader
     {
-        Task<bool> DownloadArtifactAsync(string localSavePath);
+        Task DownloadArtifactAsync(string localSavePath);
     }
         
 }

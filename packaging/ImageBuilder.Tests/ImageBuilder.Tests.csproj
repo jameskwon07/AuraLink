@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ImageDownloader\ImageDownloader.csproj" />
+    <ProjectReference Include="..\ImageBuilder\ImageBuilder.csproj" />
     <ProjectReference Include="..\TestUtils\TestUtils.csproj" />
   </ItemGroup>
 

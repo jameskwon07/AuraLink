@@ -31,7 +31,7 @@ namespace ImageDownloader
             _source = source;
         }
 
-        public async Task<bool> DownloadArtifactAsync(string localSavePath)
+        public async Task DownloadArtifactAsync(string localSavePath)
         {
             _logger.LogInformation($"[{_source.ProgramName}] 젠킨스 아티팩트 다운로드 시작. 빌드 식별자: {_source.JobIdentifier}");
 
@@ -49,17 +49,16 @@ namespace ImageDownloader
                 }
 
                 _logger.LogInformation($"[{_source.ProgramName}] 젠킨스 아티팩트 다운로드 완료: {localSavePath}");
-                return true;
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, $"[{_source.ProgramName}] 아티팩트 다운로드 실패: HTTP 요청 오류.");
-                return false;
+                throw;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"[{_source.ProgramName}] 예상치 못한 오류로 아티팩트 다운로드 실패.");
-                return false;
+                throw;
             }
         }
 

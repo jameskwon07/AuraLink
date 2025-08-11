@@ -30,7 +30,7 @@ namespace ImageDownloader
             _source = source;
         }
 
-        public async Task<bool> DownloadArtifactAsync(string localSavePath)
+        public async Task DownloadArtifactAsync(string localSavePath)
         {
             _logger.LogInformation($"[{_source.ProgramName}] 깃허브 아티팩트 다운로드 시작.");
 
@@ -54,12 +54,11 @@ namespace ImageDownloader
                 }
 
                 _logger.LogInformation($"[{_source.ProgramName}] 깃허브 아티팩트 다운로드 완료: {localSavePath}");
-                return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"[{_source.ProgramName}] 깃허브 아티팩트 다운로드 실패.");
-                return false;
+                throw;
             }
         }
     }

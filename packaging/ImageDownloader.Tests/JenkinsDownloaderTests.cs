@@ -1,15 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using Moq;
-using Xunit;
 // 이 코드는 Auralink.Downloader 프로젝트를 참조합니다.
 using ImageDownloader;
+using TestUtils;
 
 // JenkinsDownloader 클래스에 대한 유닛 테스트.
 public class JenkinsDownloaderTests
@@ -38,10 +32,9 @@ public class JenkinsDownloaderTests
         var localFilePath = "test_jenkins_artifact.zip";
 
         // 실행
-        var result = await downloader.DownloadArtifactAsync(localFilePath);
+        await downloader.DownloadArtifactAsync(localFilePath);
 
         // 검증
-        Assert.True(result);
         Assert.True(File.Exists(localFilePath));
         Assert.Equal("Test file content", File.ReadAllText(localFilePath));
 
@@ -68,11 +61,8 @@ public class JenkinsDownloaderTests
         var downloader = new JenkinsDownloader(mockHttpClient, mockLogger.Object, source);
         var localFilePath = "test_jenkins_artifact.zip";
 
-        // 실행
-        var result = await downloader.DownloadArtifactAsync(localFilePath);
-
         // 검증
-        Assert.False(result);
+        await Assert.ThrowsAsync<HttpRequestException>(async () => await downloader.DownloadArtifactAsync(localFilePath));
         Assert.False(File.Exists(localFilePath));
         mockLogger.Verify(
             x => x.Log(

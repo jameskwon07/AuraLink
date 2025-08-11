@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Moq;
-using Xunit;
-using ImageDownloader;
+
+
+namespace TestUtils;
 
 // HttpClient를 모킹하기 위한 헬퍼 클래스.
 // 테스트 시 실제 네트워크 요청을 방지합니다.

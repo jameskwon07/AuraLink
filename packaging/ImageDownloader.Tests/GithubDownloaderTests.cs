@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Moq;
 using Xunit;
 using ImageDownloader;
+using TestUtils;
 
 
 // GitHubDownloader 클래스에 대한 유닛 테스트.
@@ -29,7 +30,7 @@ public class GitHubDownloaderTests
         };
         var mockContent = new StringContent("Test file content for GitHub");
         var mockResponse = new HttpResponseMessage(HttpStatusCode.OK) { Content = mockContent };
-        
+
         var mockHandler = new MockHttpMessageHandler((request, cancellationToken) =>
             Task.FromResult(mockResponse));
         var mockHttpClient = new HttpClient(mockHandler);
@@ -38,10 +39,9 @@ public class GitHubDownloaderTests
         var localFilePath = "test_github_artifact.zip";
 
         // 실행
-        var result = await downloader.DownloadArtifactAsync(localFilePath);
+        await downloader.DownloadArtifactAsync(localFilePath);
 
         // 검증
-        Assert.True(result);
         Assert.True(File.Exists(localFilePath));
         Assert.Equal("Test file content for GitHub", File.ReadAllText(localFilePath));
 
@@ -68,11 +68,8 @@ public class GitHubDownloaderTests
         var downloader = new GitHubDownloader(mockHttpClient, mockLogger.Object, source);
         var localFilePath = "test_github_artifact.zip";
 
-        // 실행
-        var result = await downloader.DownloadArtifactAsync(localFilePath);
-
         // 검증
-        Assert.False(result);
+        await Assert.ThrowsAsync<Exception>(async () => await downloader.DownloadArtifactAsync(localFilePath));
         Assert.False(File.Exists(localFilePath));
         mockLogger.Verify(
             x => x.Log(
