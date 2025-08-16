@@ -1,0 +1,25 @@
+- name: AuralinkAgent
+  artifactSource:
+    type: jenkins
+    programName: AuralinkAgent
+    address: http://testjenkins.com
+    jobName: Auralink-Agent-Build
+    jobIdentifier: lastSuccessfulBuild
+    artifactPath: target/agent.zip
+  thirdParty:
+  - name: ThirdPartyTool-A
+    artifactSource:
+      type: github
+      programName: ThirdPartyTool-A
+      owner: thirdparty
+      repo: tool-a
+      tag: v1.0.0
+      artifactName: tool-a-win.zip
+  - name: ThirdPartyTool-B
+    artifactSource:
+      type: jenkins
+      programName: ThirdPartyTool-B
+      address: http://anotherjenkins.com
+      jobName: Tool-B-Build
+      jobIdentifier: 50
+      artifactPath: bin/tool-b.zip
