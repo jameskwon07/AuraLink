@@ -13,9 +13,22 @@ public class ConsoleProgram
     public static async Task Main(string[] args)
     {
         string yamlFilePath = "ProgramList.yaml";
+        // 명령줄 인자로부터 YAML 파일 경로를 입력받음
+        if (args.Length == 0)
+        {
+            Console.WriteLine("다른 yaml 로드 하는 방법: dotnet run <YAML_FILE_PATH>");
+        }
+        else
+        {
+            yamlFilePath = args[0];
+        }
+
+        Console.WriteLine($"YAML 파일 경로는 {Environment.CurrentDirectory}/{yamlFilePath} 입니다.");
+
+
         if (!File.Exists(yamlFilePath))
         {
-            Console.WriteLine($"Error: {yamlFilePath} 파일을 찾을 수 없습니다. ");
+            Console.WriteLine($"Error: {Environment.CurrentDirectory}/{yamlFilePath} 파일을 찾을 수 없습니다. ");
             return;
         }
 
