@@ -44,19 +44,19 @@ jobs:
       - name: Restore and build
         run: dotnet publish packaging/packaging.sln --configuration ${{ env.BUILD_CONFIG }} -o ./publish-out
 
-      # 4. 아티팩트(빌드 결과물) 압축
-      - name: Archive artifacts
-        run: |
-          # 운영체제별로 다른 압축 명령어를 사용합니다.
-          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            tar -czvf app-linux-${{ env.BUILD_CONFIG }}.tar.gz -C ./publish-out .
-          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
-            Compress-Archive -Path ./publish-out/* -DestinationPath app-windows-${{ env.BUILD_CONFIG }}.zip
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            tar -czvf app-macos-${{ env.BUILD_CONFIG }}.tar.gz -C ./publish-out .
-          fi
+      # 4. Linux/macOS 아티팩트 압축
+      - name: Archive artifacts on Linux/macOS
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+        run: tar -czvf app-${{ matrix.os }}-${{ env.BUILD_CONFIG }}.tar.gz -C ./publish-out .
+      
+      # 5. Windows 아티팩트 압축 (PowerShell에서 실행)
+      - name: Archive artifacts on Windows
+        if: matrix.os == 'windows-latest'
+        shell: powershell
+        run: Compress-Archive -Path ./publish-out/* -DestinationPath app-windows-${{ env.BUILD_CONFIG }}.zip
 
-      # 5. 빌드 결과물 업로드 (다음 작업에서 사용)
+
+      # 6. 빌드 결과물 업로드 (다음 작업에서 사용)
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
