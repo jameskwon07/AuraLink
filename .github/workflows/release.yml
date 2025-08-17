@@ -1,0 +1,90 @@
+# 워크플로우 이름
+name: Build and Release .NET App
+
+# 워크플로우가 실행될 조건
+# main 브랜치에 푸시가 발생하거나, GitHub Release가 생성될 때 실행
+on:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - created
+
+# 워크플로우에 포함된 작업들
+jobs:
+  # 빌드 작업
+  build:
+    # 이 작업이 실행될 환경
+    runs-on: ${{ matrix.os }}
+
+    # 매트릭스 전략: 여러 운영체제에서 동시에 작업 실행
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        configuration: [Release]
+
+    # 환경 변수 정의
+    env:
+      BUILD_CONFIG: ${{ matrix.configuration }}
+
+    # 작업 단계 (Steps)
+    steps:
+      # 1. GitHub Actions에서 제공하는 기본 액션: 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. .NET SDK 설치
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.413' # 원하는 .NET 버전으로 변경하세요.
+
+      # 3. 프로젝트 복원 및 빌드
+      - name: Restore and build
+        run: dotnet publish packaging/packaging.sln --configuration ${{ env.BUILD_CONFIG }} -o ./publish-out
+
+      # 4. 아티팩트(빌드 결과물) 압축
+      - name: Archive artifacts
+        run: |
+          # 운영체제별로 다른 압축 명령어를 사용합니다.
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            tar -czvf app-linux-${{ env.BUILD_CONFIG }}.tar.gz -C ./publish-out .
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            Compress-Archive -Path ./publish-out/* -DestinationPath app-windows-${{ env.BUILD_CONFIG }}.zip
+          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
+            tar -czvf app-macos-${{ env.BUILD_CONFIG }}.tar.gz -C ./publish-out .
+          fi
+
+      # 5. 빌드 결과물 업로드 (다음 작업에서 사용)
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-binaries
+          path: |
+            *.zip
+            *.tar.gz
+
+  # 릴리즈 업로드 작업
+  release:
+    # 이 작업은 build 작업이 성공적으로 완료된 후에 실행됩니다.
+    needs: build
+    # 이 작업은 GitHub Release가 생성되었을 때만 실행됩니다.
+    if: github.event_name == 'release' && github.event.action == 'created'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 릴리즈에 파일을 업로드하려면 이 권한이 필요합니다.
+
+    # 작업 단계 (Steps)
+    steps:
+      # 1. 릴리즈에 업로드할 아티팩트 다운로드
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      # 2. 릴리즈에 빌드 결과물 업로드
+      - name: Upload binaries to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            */app-*-*.zip
+            */app-*-*.tar.gz
