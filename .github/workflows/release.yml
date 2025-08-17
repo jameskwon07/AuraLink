@@ -58,6 +58,7 @@ jobs:
 
       # 6. 빌드 결과물 업로드 (다음 작업에서 사용)
       - name: Upload artifact
+        if: github.event_name == 'release'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-binaries
