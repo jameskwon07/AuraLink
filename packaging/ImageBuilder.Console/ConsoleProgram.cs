@@ -78,9 +78,11 @@ public class ConsoleProgram
             builder.AddConsole();
             builder.SetMinimumLevel(LogLevel.Debug);
         });
+        var downloaderFactory = new DownloaderFactory();
+        var checksumGenerator = new ChecksumGenerator(loggerFactory.CreateLogger<ChecksumGenerator>());
 
         // 의존성 주입을 위해 DownloaderFactory 인스턴스를 생성합니다.
-        var imageBuilder = new ImageBuilder(loggerFactory);
+        var imageBuilder = new ImageBuilder(loggerFactory, downloaderFactory, checksumGenerator);
         await imageBuilder.BuildAsync(programList, "./downloads");
     }
 }

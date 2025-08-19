@@ -14,9 +14,10 @@ public class DownloaderFactoryTests
         // 준비
         var mockLoggerFactory = new Mock<ILoggerFactory>();
         var source = new JenkinsArtifactSource();
+        var factory = new DownloaderFactory();
 
         // 실행
-        var downloader = DownloaderFactory.CreateDownloader(mockLoggerFactory.Object, source);
+        var downloader = factory.CreateDownloader(mockLoggerFactory.Object, source);
 
         // 검증
         Assert.IsType<JenkinsDownloader>(downloader);
@@ -28,9 +29,10 @@ public class DownloaderFactoryTests
         // 준비
         var mockLoggerFactory = new Mock<ILoggerFactory>();
         var source = new GitHubArtifactSource();
+        var factory = new DownloaderFactory();
 
         // 실행
-        var downloader = DownloaderFactory.CreateDownloader(mockLoggerFactory.Object, source);
+        var downloader = factory.CreateDownloader(mockLoggerFactory.Object, source);
 
         // 검증
         Assert.IsType<GitHubDownloader>(downloader);
@@ -43,8 +45,9 @@ public class DownloaderFactoryTests
         var mockLoggerFactory = new Mock<ILoggerFactory>();
         var source = new Mock<IArtifactSource>();
         source.SetupGet(s => s.Type).Returns("unsupported");
-        
+        var factory = new DownloaderFactory();
+
         // 실행 & 검증
-        Assert.Throws<NotSupportedException>(() => DownloaderFactory.CreateDownloader(mockLoggerFactory.Object, source.Object));
+        Assert.Throws<NotSupportedException>(() => factory.CreateDownloader(mockLoggerFactory.Object, source.Object));
     }
 }

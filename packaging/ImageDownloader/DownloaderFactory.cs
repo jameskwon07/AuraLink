@@ -1,13 +1,10 @@
-﻿namespace ImageBuilder;
+namespace ImageDownloader;
 
-using ImageDownloader;
 using Microsoft.Extensions.Logging;
 
-// IArtifactDownloader 인터페이스를 사용해 다운로더를 생성하는 팩토리 클래스.
-// 이 클래스는 프로그램의 아티팩트 소스 타입에 따라 적절한 다운로더를 반환합니다.
-public static class DownloaderFactory
+public class DownloaderFactory : IDownloaderFactory
 {
-    public static IArtifactDownloader CreateDownloader(ILoggerFactory loggerFactory, IArtifactSource source)
+    public IArtifactDownloader CreateDownloader(ILoggerFactory loggerFactory, IArtifactSource source)
     {
         switch (source.Type.ToLower())
         {
