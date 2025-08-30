@@ -1,0 +1,70 @@
+# AuraLink Software Design Description
+
+- [AuraLink Software Design Description](#auralink-software-design-description)
+  - [Stakeholders \& Concerns](#stakeholders--concerns)
+  - [Context](#context)
+    - [Viewpoint](#viewpoint)
+      - [Purpose](#purpose)
+      - [Element](#element)
+        - [Entity](#entity)
+        - [Relation](#relation)
+      - [Language](#language)
+    - [View](#view)
+
+
+## Stakeholders & Concerns
+| 직군 | 관심사 |
+| -- | -- |
+| 시스템 엔지니어 | 버전 관리 |
+| 개발자 | 버전 관리<br>배포 절차 |
+| 배포 관리자 | 버전 관리<br>배포 절차<br>데이터 저장 및 관리 |
+| 사용자 | 버전 관리<br>설치 절차 |
+
+
+## Context
+### Viewpoint
+#### Purpose
+AuraLink 시스템의 전체적인 시스템 구조를 파악하기 위한 Viewpoint
+#### Element
+Context Viewpoint의 구성 요소
+##### Entity
+* Actor  
+    * 시스템 엔지니어
+    * 개발자
+    * 배포 관리자
+    * 사용자
+    * 아티팩트 저장소
+    
+* Service
+    * 개발자는 소프트웨어를 개발하여 아티팩트 저장소에 업로드한다.
+    * 
+    * 시스템 엔지니어는 패키징된 소프트웨어의 버전을 확인한다.
+    * 사용자는 패키지 버전을 선택하여 설치한다.
+
+##### Relation
+* 개발자는 패키징할 소프트웨어 설정을 입력한다.
+* 시스템 엔지니어는 패키징되어있는 소프트웨어 버전을 확인한다.
+* 사용자는 패키징되어있는 소프트웨어 버전 목록을 확인한다.
+* 사용자는 패키징되어있는 소프트웨어를 다운로드 받는다.
+#### Language
+* C4 Diagram - Level 1
+### View
+```mermaid
+C4Context
+
+Person(sys, "시스템 엔지니어", "배포가 되는 소프트웨어 버전을 관리한다")
+Person(ops, "배포 관리자", "아티팩트를 이용하여 소프트웨어를 배포한다")
+Person(user, "사용자", "설치된 소프트웨어를 이용한다")
+Person(dev, "개발자", "소프트웨어를 개발하여 아티팩트 저장소에 업로드한다")
+System(aura_link, "Aura Link", "프로그램을 가져와 패키징")
+System_Ext(artifacts, "아티팩트 저장소", "아티팩트가 저장되어있는 저장소")
+    
+
+Rel(sys, aura_link, "배포된 버전 확인")
+Rel(dev, artifacts, "개발된 소프트웨어 아티팩트 업로드")
+Rel(dev, aura_link, "패키지 사용된 소프트웨어 버전 확인")
+Rel(ops, aura_link, "아티팩트를 이용하여 소프트웨어 패키징")
+Rel(ops, aura_link, "패키지 다운로드하여 배포")
+Rel(aura_link, artifacts, "아티팩트 다운로드")
+Rel(user, aura_link, "패키지를 이용하여 설치")
+```
