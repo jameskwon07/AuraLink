@@ -46,13 +46,14 @@ public class ConsoleProgram
             var yamlData = deserializer.Deserialize<List<object>>(yamlContent);
 
             // 2. 딕셔너리를 파싱하여 Program 객체 리스트로 변환
-            var programs = ProgramParser.ParsePrograms(yamlData);
+            programList = ProgramParser.ParsePrograms(yamlData);
 
             Console.WriteLine("YAML 파싱 완료!");
             Console.WriteLine("---------------------------------");
             
+            
             // 결과 확인
-            foreach (var program in programs)
+            foreach (var program in programList)
             {
                 Console.WriteLine($"프로그램: {program.Name}");
                 Console.WriteLine($"  아티팩트 소스 타입: {program.ArtifactSource.Type} ({program.ArtifactSource.GetType().Name})");

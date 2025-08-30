@@ -63,8 +63,8 @@ public class ImageBuilder
         // 1. 메인 프로그램 아티팩트 다운로드
         _logger.LogInformation($"메인 프로그램 '{program.Name}' 아티팩트 다운로드 중...");
         IArtifactDownloader mainDownloader = _downloaderFactory.CreateDownloader(_loggerFactory, program.ArtifactSource);
-        string mainSavePath = Path.Combine(rootDownloadPath, $"{program.Name}_main.zip");
-        await mainDownloader.DownloadArtifactAsync(mainSavePath);
+        // string mainSavePath = Path.Combine(rootDownloadPath, $"{program.Name}");
+        await mainDownloader.DownloadArtifactAsync(rootDownloadPath);
 
         // 2. 의존성 프로그램 아티팩트 다운로드
         if (program.ThirdParty != null && program.ThirdParty.Any())
@@ -74,7 +74,7 @@ public class ImageBuilder
             {
                 _logger.LogInformation($"의존성 '{dependency.Name}' 아티팩트 다운로드 중...");
                 IArtifactDownloader dependencyDownloader = _downloaderFactory.CreateDownloader(_loggerFactory, dependency.ArtifactSource);
-                string dependencySavePath = Path.Combine(rootDownloadPath, $"{program.Name}_{dependency.Name}_dependency.zip");
+                string dependencySavePath = Path.Combine(rootDownloadPath, $"{program.Name}_{dependency.Name}");
                 await dependencyDownloader.DownloadArtifactAsync(dependencySavePath);
             }
         }

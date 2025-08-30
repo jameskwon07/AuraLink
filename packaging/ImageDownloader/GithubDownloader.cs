@@ -38,7 +38,7 @@ namespace ImageDownloader
             {
                 // 이 부분에 깃허브 API를 사용하여 아티팩트를 다운로드하는 로직을 구현합니다.
                 // 예시로 더미 코드를 작성합니다.
-                var dummyUrl = $"https://api.github.com/repos/{_source.Owner}/{_source.Repo}/releases/tags/{_source.Tag}/assets/{_source.ArtifactName}";
+                var dummyUrl = $"https://github.com/{_source.Owner}/{_source.Repo}/releases/download/{_source.Tag}/{_source.ArtifactName}";
                 _logger.LogDebug($"다운로드 URL: {dummyUrl}");
                 
                 // 실제 구현에서는 GitHub API 인증 헤더가 필요합니다.
@@ -48,7 +48,7 @@ namespace ImageDownloader
                 HttpResponseMessage response = await _httpClient.GetAsync(dummyUrl, HttpCompletionOption.ResponseHeadersRead);
                 response.EnsureSuccessStatusCode();
 
-                await using (var fileStream = new FileStream(localSavePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                await using (var fileStream = new FileStream($"{localSavePath}/{_source.ArtifactName}", FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     await response.Content.CopyToAsync(fileStream);
                 }

@@ -1,25 +1,25 @@
-- name: AuralinkAgent
+- name: AuraLink
   artifactSource:
-    type: jenkins
-    programName: AuralinkAgent
-    address: http://testjenkins.com
-    jobName: Auralink-Agent-Build
-    jobIdentifier: lastSuccessfulBuild
-    artifactPath: target/agent.zip
-  thirdParty:
-  - name: ThirdPartyTool-A
-    artifactSource:
-      type: github
-      programName: ThirdPartyTool-A
-      owner: thirdparty
-      repo: tool-a
-      tag: v1.0.0
-      artifactName: tool-a-win.zip
-  - name: ThirdPartyTool-B
-    artifactSource:
-      type: jenkins
-      programName: ThirdPartyTool-B
-      address: http://anotherjenkins.com
-      jobName: Tool-B-Build
-      jobIdentifier: 50
-      artifactPath: bin/tool-b.zip
+    type: github
+    programName: ImageBuilder
+    owner: jameskwon07
+    repo: AuraLink
+    tag: 0.0.1
+    artifactName: app-macos-latest-Release.tar.gz
+  # thirdParty:
+  # - name: ThirdPartyTool-A
+  #   artifactSource:
+  #     type: github
+  #     programName: ThirdPartyTool-A
+  #     owner: thirdparty
+  #     repo: tool-a
+  #     tag: v1.0.0
+  #     artifactName: tool-a-win.zip
+  # - name: ThirdPartyTool-B
+  #   artifactSource:
+  #     type: jenkins
+  #     programName: ThirdPartyTool-B
+  #     address: http://anotherjenkins.com
+  #     jobName: Tool-B-Build
+  #     jobIdentifier: 50
+  #     artifactPath: bin/tool-b.zip
